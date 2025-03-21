@@ -19,6 +19,18 @@ echo "📦 Fetching Brewfile..."
 curl --fail "$BASE_URL/Brewfile" -o ./Brewfile
 brew bundle --file=./Brewfile
 
+echo "🐟 Setting fish as the default shell..."
+
+brew install fish || true
+
+if ! grep -q "$(brew --prefix)/bin/fish" /etc/shells; then
+  echo "$(brew --prefix)/bin/fish" | sudo tee -a /etc/shells
+fi
+
+chsh -s "$(brew --prefix)/bin/fish"
+
+echo "✅ Default shell set to fish."
+
 # Fetch and install starship.toml from the release
 echo "✨ Configuring Starship..."
 mkdir -p "${HOME}/.config"
