@@ -6,7 +6,7 @@ set -o pipefail
 
 # Allow overriding version for CI
 VERSION="${VERSION:-v1.0.0}"
-REPO="your-org/macos-dev-bootstrap"
+REPO="ammardodin/macos-dev-bootstrap"
 BASE_URL="https://raw.githubusercontent.com/$REPO/$VERSION"
 
 echo "🚀 Setting up macOS Development Environment (Version: $VERSION)"

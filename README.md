@@ -18,7 +18,7 @@ This repository provides a simple, testable way to bootstrap a macOS development
 You can fetch and run the bootstrap script from a specific tag:
 
 ```
-curl -fsSL https://raw.githubusercontent.com/your-org/macos-dev-bootstrap/v1.0.0/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ammardodin-alation/macos-dev-bootstrap/v1.0.0/setup.sh | bash
 ```
 
 ✅ Replace `v1.0.0` with any release tag you want to pin.
