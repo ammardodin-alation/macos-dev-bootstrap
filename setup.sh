@@ -4,7 +4,7 @@ set -o errexit
 set -o errtrace
 set -o pipefail
 
-if [[ ! -z "${DEBUG}"]]; then
+if [[ ! -z "${DEBUG}" ]]; then
     set -x
 fi
 
