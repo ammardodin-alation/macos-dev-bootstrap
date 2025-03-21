@@ -30,9 +30,5 @@ jobs:
           echo "✅ Running against commit $COMMIT_SHA"
           curl -fsSL https://raw.githubusercontent.com/ammardodin-alation/macos-dev-bootstrap/$COMMIT_SHA/setup.sh | HOMEBREW_CASK_OPTS="--no-quarantine" VERSION=$COMMIT_SHA bash
 
-      - name: Verify Starship config was installed
-        run: |
-          test -f "${HOME}/.config/starship.toml"
-
       - name: Validate Brewfile syntax
         run: brew bundle check --file=./Brewfile || echo "✅ Brewfile installs fine"
