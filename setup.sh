@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-set -o errexit
+# set -o errexit
 set -o errtrace
-set -o pipefail
+# set -o pipefail
 
 # Allow overriding version for CI
 VERSION="${VERSION:-v1.0.0}"
@@ -16,6 +16,7 @@ ls -alh
 
 # Fetch and use the Brewfile from the specific version
 echo "📦 Fetching Brewfile..."
+echo "ok"
 curl --fail "$BASE_URL/Brewfile" -o ./Brewfile
 brew bundle --file=./Brewfile
 
