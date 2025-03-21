@@ -28,7 +28,7 @@ jobs:
         run: |
           set -e
           echo "✅ Running against commit $COMMIT_SHA"
-          curl -fsSL https://raw.githubusercontent.com/ammardodin-alation/macos-dev-bootstrap/$COMMIT_SHA/setup.sh | VERSION=$COMMIT_SHA bash
+          curl -fsSL https://raw.githubusercontent.com/ammardodin-alation/macos-dev-bootstrap/$COMMIT_SHA/setup.sh | HOMEBREW_CASK_OPTS="--no-quarantine" VERSION=$COMMIT_SHA bash
 
       - name: Verify Starship config was installed
         run: |
