@@ -4,6 +4,8 @@ set -o errexit
 set -o errtrace
 set -o pipefail
 
+set -x
+
 # Allow overriding version for CI
 VERSION="${VERSION:-v1.0.0}"
 HOME="${HOME:-.}"
