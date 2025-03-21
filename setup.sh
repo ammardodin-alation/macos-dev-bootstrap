@@ -6,14 +6,14 @@ set -o pipefail
 
 # Allow overriding version for CI
 VERSION="${VERSION:-v1.0.0}"
-REPO="ammardodin/macos-dev-bootstrap"
+REPO="ammardodin-alation/macos-dev-bootstrap"
 BASE_URL="https://raw.githubusercontent.com/$REPO/$VERSION"
 
 echo "🚀 Setting up macOS Development Environment (Version: $VERSION)"
 
 # Fetch and use the Brewfile from the specific version
 echo "📦 Fetching Brewfile..."
-curl -fsSL "$BASE_URL/Brewfile" -o ./Brewfile
+curl "$BASE_URL/Brewfile" -o ./Brewfile
 brew bundle --file=./Brewfile
 
 # Optional: Setup Python environment
@@ -24,6 +24,6 @@ pyenv global 3.11.7
 # Fetch and install starship.toml from the release
 echo "✨ Configuring Starship..."
 mkdir -p ~/.config
-curl -fsSL "$BASE_URL/starship.toml" -o ~/.config/starship.toml
+curl "$BASE_URL/starship.toml" -o ~/.config/starship.toml
 
 echo "✅ Bootstrap completed."
