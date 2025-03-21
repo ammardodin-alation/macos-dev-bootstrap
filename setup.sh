@@ -4,9 +4,10 @@ set -o errexit
 set -o errtrace
 set -o pipefail
 
-set -x
+if [[ ! -z "${DEBUG}"]]; then
+    set -x
+fi
 
-# Allow overriding version for CI
 VERSION="${VERSION:-v1.0.0}"
 HOME="${HOME:-.}"
 REPO="ammardodin-alation/macos-dev-bootstrap"
