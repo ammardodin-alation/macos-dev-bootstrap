@@ -23,7 +23,7 @@ pyenv global 3.11.7
 
 # Fetch and install starship.toml from the release
 echo "✨ Configuring Starship..."
-mkdir -p ~/.config
-curl "$BASE_URL/starship.toml" -o ~/.config/starship.toml
+mkdir -p "${HOME}/.config"
+curl "$BASE_URL/starship.toml" -o "${HOME}/.config/starship.toml"
 
 echo "✅ Bootstrap completed."
