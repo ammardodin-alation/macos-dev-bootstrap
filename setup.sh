@@ -15,10 +15,10 @@ echo "🚀 Setting up macOS Development Environment (Version: $VERSION)"
 ls -alh
 
 # Fetch and use the Brewfile from the specific version
-echo "📦 Fetching Brewfile..."
-echo "ok"
-curl --fail "$BASE_URL/Brewfile" -o ./Brewfile
-brew bundle --file=./Brewfile
+# echo "📦 Fetching Brewfile..."
+# echo "ok"
+# curl --fail "$BASE_URL/Brewfile" -o ./Brewfile
+# brew bundle --file=./Brewfile
 
 echo "🐟 Setting fish as the default shell..."
 
