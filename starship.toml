@@ -1,0 +1,21 @@
+add_newline = true
+format = "\n$directory$git_branch$git_status$nodejs$python$terraform$kubernetes\n$character"
+
+[directory]
+style = "cyan"
+
+[git_branch]
+style = "green"
+
+[git_status]
+style = "red"
+
+[python]
+symbol = "🐍 "
+
+[terraform]
+symbol = "🛠️ "
+
+[kubernetes]
+symbol = "☸️ "
+EOF

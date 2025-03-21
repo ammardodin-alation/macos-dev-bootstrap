@@ -1,0 +1,13 @@
+
+# Nix specific
+result
+result-*
+flake.lock
+.cache
+*.log
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
