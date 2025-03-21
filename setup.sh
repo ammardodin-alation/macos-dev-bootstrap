@@ -12,19 +12,15 @@ BASE_URL="https://raw.githubusercontent.com/$REPO/$VERSION"
 
 echo "🚀 Setting up macOS Development Environment (Version: $VERSION)"
 
+ls -alh
+
 # Fetch and use the Brewfile from the specific version
 echo "📦 Fetching Brewfile..."
 curl --fail "$BASE_URL/Brewfile" -o ./Brewfile
 brew bundle --file=./Brewfile
 
-# Optional: Setup Python environment
-echo "🐍 Setting up Python environment..."
-pyenv install 3.11.7 || true
-pyenv global 3.11.7
-
 # Fetch and install starship.toml from the release
 echo "✨ Configuring Starship..."
-ls -alh
 mkdir -p "${HOME}/.config"
 curl --fail "$BASE_URL/starship.toml" -o "${HOME}/.config/starship.toml"
 
