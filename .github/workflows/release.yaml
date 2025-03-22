@@ -10,7 +10,6 @@ permissions:
   issues: write         # Optional: if you want to interact with issues
   pull-requests: write  # Optional: if you extend semantic-release to comment or PR changelog
 
-
 jobs:
   release:
     runs-on: ubuntu-latest

@@ -8,7 +8,6 @@ This project bootstraps a fully-featured macOS development environment, handling
 - [🐚 Zsh Configuration](#-zsh-configuration)
 - [🌟 Starship Prompt Customization](#-starship-prompt-customization)
 - [🛠 Execution Flow](#-execution-flow)
-- [🎯 iTerm2 Enhancements](#-iterm2-enhancements)
 - [✅ CI Validated](#-ci-validated-github-actions)
 - [🚀 Usage](#-usage)
 - [🛠 After Running](#-after-running)
@@ -55,11 +54,6 @@ This project bootstraps a fully-featured macOS development environment, handling
 3. Install **tools and apps** (`Brewfile.tools`) – AWS CLI, Kubernetes tools, VS Code, etc.
 4. **Configure iTerm2 key bindings** as the final step
 
-## 🎯 iTerm2 Enhancements
-
-- Automatically maps `Ctrl + Backspace` to **delete the previous word**
-- Recommends **Hack Nerd Font** for proper icon and glyph rendering
-
 ## ✅ CI Validated (GitHub Actions)
 
 - Runs on:
@@ -76,13 +70,6 @@ This project bootstraps a fully-featured macOS development environment, handling
 chmod +x setup.sh
 ./setup.sh
 ```
-
-## 🛠 After Running
-
-1. Open **iTerm2**
-2. Go to **Preferences → Profiles → Text**
-3. Set the font to **Hack Nerd Font**
-4. Restart iTerm2 or run `exec zsh`
 
 ## 🎉 Result
 
