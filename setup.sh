@@ -67,10 +67,10 @@ else
   echo "✅ Default shell is already set to system Zsh."
 fi
 
-# Add zsh-autosuggestions
+# Ensure zsh-autosuggestions is sourced (store literal command in .zshrc)
 echo "✨ Ensuring zsh-autosuggestions is sourced..."
 if ! grep -q '^source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh$' "$ZSHRC"; then
-  echo 'source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ZSHRC"
+  echo "source \$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" >> "$ZSHRC"
 fi
 
 # Ensure Zsh completion system is initialized
@@ -119,7 +119,7 @@ function listec2 {
 function terminateec2 {
   region=${1:-${AWS_REGION:-us-east-1}}
   profile=${2:-${AWS_PROFILE:-engineering}}
-  ec2list="$(listec2 $region $profile)"
+  ec2list="$(listec2 "$region" "$profile")"
   if [[ -z "$ec2list" ]]; then
     echo "No active EC2 instances were found"
     return 0
@@ -154,15 +154,19 @@ EOF
 sync_zsh_block "$HISTORY_BLOCK_START" "$HISTORY_BLOCK_END" "$HISTORY_SETTINGS"
 echo "✅ Zsh history settings synced to .zshrc"
 
-echo "🔧 Configuring iTerm2 key binding: Ctrl + Backspace → delete previous word (send hex 0x17)"
+# iTerm2 Keybinding: Ctrl+Backspace to delete previous word (send 0x17 / Ctrl-W)
+echo ""
+echo "⚠️  iTerm2 Key Binding Automation:"
+echo "🔧 Setting up Ctrl + Backspace to delete the previous word (like Ctrl+W)"
 defaults write com.googlecode.iterm2 "New Bookmarks" -array-add \
   "{
     Name = \"Default\";
-    Shortcut = \"^?\"; 
+    Shortcut = \"^?\";
     Action = 10;
     Text = \"\\U0017\";
     ModifierFlags = 262144;
   }"
+echo "✅ iTerm2 key binding added (restart iTerm2 if needed)"
 
 # Final output
 echo ""
@@ -173,4 +177,4 @@ echo "✅ Starship prompt ready"
 echo "✅ Custom Zsh functions, completion, and history settings applied"
 echo ""
 echo "⚠️  Don't forget: Open iTerm2 → Preferences → Profiles → Text → Change Font → Select 'Hack Nerd Font'"
-echo "⚠️  Run 'exec zsh' or restart your terminal to apply changes."
+echo "⚠️  Run 'exec zsh' or restart your terminal to apply changes"
