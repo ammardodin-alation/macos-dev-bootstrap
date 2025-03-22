@@ -30,11 +30,9 @@ jobs:
           brew install shellcheck
           shellcheck setup.sh
 
-      - name: 🍺 Install Brewfile dependencies in CI
+      - name: 🍺 Install Brewfile dependencies in CI (no update/upgrade)
         run: |
           set -euo pipefail
-          brew update
-          brew upgrade
           brew bundle --file=./Brewfile
 
       - name: 🛠️ Make setup script executable
