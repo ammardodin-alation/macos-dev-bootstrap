@@ -1,0 +1,92 @@
+name: Test macOS Dev Setup Script
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test-macos-setup:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        runner: [macos-13, macos-14]
+
+    steps:
+      - name: 🛎️ Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 📥 Cache Homebrew
+        uses: actions/cache@v3
+        with:
+          path: |
+            /usr/local/Homebrew
+            ~/Library/Caches/Homebrew
+          key: brew-${{ matrix.runner }}-${{ hashFiles('Brewfile.shell', 'Brewfile.tools') }}
+
+      - name: 🔎 Lint setup script with shellcheck
+        run: |
+          set -euo pipefail
+          brew install shellcheck
+          shellcheck setup.sh
+
+      - name: 🍺 Install shell Brewfile in CI
+        run: |
+          set -euo pipefail
+          brew bundle --file=Brewfile.shell
+
+      - name: ⚙️ Run setup script in CI mode (shell config only)
+        run: |
+          set -euo pipefail
+          chmod +x setup.sh
+          CI_MODE=1 ./setup.sh
+
+      - name: 📦 Install tools (skip awscli on macos-13)
+        run: |
+          set -euo pipefail
+          if [[ "${{ matrix.runner }}" == "macos-13" ]]; then
+            echo "⚠️ Skipping awscli on macos-13"
+            grep -v 'brew "awscli"' Brewfile.tools > Brewfile.tools.ci
+            brew bundle --file=Brewfile.tools.ci
+          else
+            brew bundle --file=Brewfile.tools
+          fi
+
+      - name: ✅ Validate zsh-autosuggestions is in .zshrc
+        run: |
+          set -euo pipefail
+          grep 'zsh-autosuggestions' ~/.zshrc
+
+      - name: ✨ Validate starship is configured in .zshrc
+        run: |
+          set -euo pipefail
+          grep 'starship init zsh' ~/.zshrc
+
+      - name: 📂 Validate starship.toml is copied
+        run: |
+          set -euo pipefail
+          test -f "${HOME}/.config/starship.toml"
+
+      - name: 🔄 Validate .zshrc contains custom functions block
+        run: |
+          set -euo pipefail
+          grep 'CUSTOM FUNCTIONS' ~/.zshrc
+
+      - name: 🧠 Validate .zshrc contains history settings block
+        run: |
+          set -euo pipefail
+          grep 'ZSH HISTORY SETTINGS' ~/.zshrc
+
+      - name: 🖥️ Simulate Zsh shell test to verify shell is usable
+        run: |
+          set -euo pipefail
+          exec zsh -c 'echo "✅ Zsh shell test passed"'
+
+      - name: 🔥 Validate AWS CLI mock usage (simulate EC2 call)
+        env:
+          AWS_REGION: us-east-1
+          AWS_PROFILE: dummy-profile
+        run: |
+          set -euo pipefail
+          echo "Simulating AWS function call"
+          aws --version

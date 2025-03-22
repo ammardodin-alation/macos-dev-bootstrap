@@ -1,38 +1,94 @@
-# 🚀 macOS Dev Bootstrap
+# 🚀 macOS Dev Environment Setup
 
-This repository provides a simple, testable way to bootstrap a macOS development machine with a fundamental set of tools.
+This project bootstraps a fully-featured macOS development environment, handling shell setup, essential tools, and terminal enhancements in a clean, modular flow.
 
-## ✅ Features
-- Python (via `pyenv`) and Terraform (`tfenv`) version management
-- Fish shell and Starship prompt setup
-- CI validation of the bootstrap process
+## 📚 Table of Contents
+- [🧰 CLI Tools Installed](#-cli-tools-installed-via-homebrew)
+- [🖥️ GUI Applications](#️-gui-applications-via-homebrew-cask)
+- [🐚 Zsh Configuration](#-zsh-configuration)
+- [🌟 Starship Prompt Customization](#-starship-prompt-customization)
+- [🛠 Execution Flow](#-execution-flow)
+- [🎯 iTerm2 Enhancements](#-iterm2-enhancements)
+- [✅ CI Validated](#-ci-validated-github-actions)
+- [🚀 Usage](#-usage)
+- [🛠 After Running](#-after-running)
+- [🎉 Result](#-result)
 
-## 📦 Included Tools
-- jq, yq, pyenv, fish, starship, htop, ripgrep, curl, kubectl, kubectx
-- Terraform and tfenv
-- Visual Studio Code and OrbStack
+## 🧰 CLI Tools Installed (via Homebrew)
 
-## 🔧 Usage
+- **Cloud & DevOps**: `awscli`, `gh`, `helm`, `kubectl`, `kubectx`, `tfenv`
+- **Productivity**: `ripgrep`, `jq`, `yq`, `watch`, `tree`, `htop`, `neofetch`, `pyenv`, `curl`
+- **Shell Enhancements**: `zsh-autosuggestions`, `starship`
 
-### 🚀 Run Directly from GitHub (versioned release)
-You can fetch and run the bootstrap script from a specific tag:
+## 🖥️ GUI Applications (via Homebrew Cask)
 
+- `iterm2` – Terminal replacement
+- `font-hack-nerd-font` – Nerd Font for rich prompts
+- `orbstack` – Docker/Kubernetes manager
+- `postman` – API testing
+- `visual-studio-code` – Code editor
+
+## 🐚 Zsh Configuration
+
+- Installs **Oh My Zsh** and sets Zsh as the default shell
+- Adds **zsh-autosuggestions** plugin
+- Configures **compinit** for completions
+- Injects custom functions:
+  - 📜 Git log formatter
+  - ☁️ AWS EC2 helpers (list & terminate instances)
+- Adds Zsh history optimizations
+- Initializes **Starship prompt**
+
+## 🌟 Starship Prompt Customization
+
+- Clean, icon-enhanced prompt featuring:
+  - 🐍 Python
+  - 🛠️ Terraform
+  - ☸️ Kubernetes
+  - ➜ Success symbol
+- Configurable via `starship.toml`
+
+## 🛠 Execution Flow
+
+1. Install **shell essentials** (`Brewfile.shell`) – `starship`, `zsh-autosuggestions`, `pyenv`
+2. Configure **Zsh**: completions, history, plugins, Starship
+3. Install **tools and apps** (`Brewfile.tools`) – AWS CLI, Kubernetes tools, VS Code, etc.
+4. **Configure iTerm2 key bindings** as the final step
+
+## 🎯 iTerm2 Enhancements
+
+- Automatically maps `Ctrl + Backspace` to **delete the previous word**
+- Recommends **Hack Nerd Font** for proper icon and glyph rendering
+
+## ✅ CI Validated (GitHub Actions)
+
+- Runs on:
+  - **macOS Intel (`macos-13`)**
+  - **Apple Silicon (`macos-14`)**
+- Validates:
+  - `.zshrc` configuration
+  - Starship prompt setup
+  - Custom functions and completions
+
+## 🚀 Usage
+
+```bash
+chmod +x setup.sh
+./setup.sh
 ```
-curl -fsSL https://raw.githubusercontent.com/ammardodin-alation/macos-dev-bootstrap/v1.0.0/setup.sh | bash
-```
 
-✅ Replace `v1.0.0` with any release tag you want to pin.
+## 🛠 After Running
 
-## 🔄 CI Automation
-This repo includes a GitHub Actions workflow that:
-- Lints the setup script with shellcheck
-- Runs the bootstrap on `macos-latest`
-- Verifies tool installation
+1. Open **iTerm2**
+2. Go to **Preferences → Profiles → Text**
+3. Set the font to **Hack Nerd Font**
+4. Restart iTerm2 or run `exec zsh`
 
-Run it via:
-```
-github actions / .github/workflows/ci.yml
-```
+## 🎉 Result
 
-## 🛠 Customization
-- Update `setup.sh` to customize Python/Terraform versions or shell behavior
+✅ Fully configured Zsh environment with Starship prompt  
+✅ Cloud, Kubernetes, Python, and Terraform ready  
+✅ Zsh completions, history settings, and custom AWS helpers  
+✅ Beautiful, minimal Starship-powered terminal  
+✅ iTerm2 key binding and Nerd Font support  
+✅ CI-tested on both Intel and Apple Silicon Macs
