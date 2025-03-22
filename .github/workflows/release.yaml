@@ -5,9 +5,14 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write       # Needed to push CHANGELOG.md, tags
+  issues: write         # Optional: if you want to interact with issues
+  pull-requests: write  # Optional: if you extend semantic-release to comment or PR changelog
+
+
 jobs:
   release:
-    if: contains(github.event.head_commit.message, '[release]')
     runs-on: ubuntu-latest
 
     steps:
