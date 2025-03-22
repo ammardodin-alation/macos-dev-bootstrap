@@ -165,7 +165,6 @@ function configure_iterm2_keybinding() {
   echo "✅ iTerm2 keybinding updated via PlistBuddy. Restart iTerm2 to apply."
 }
 
-
 echo ""
 echo "🎉 Setup complete!"
 echo "✅ Oh My Zsh configured"

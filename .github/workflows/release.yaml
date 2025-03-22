@@ -1,16 +1,29 @@
-name: Release Please
+name: Release
 
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
 
-      - name: Run release-please
-        uses: google-github-actions/release-please-action@v4
+    steps:
+      - name: 🛎️ Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # semantic-release needs full history to compute version
+
+      - name: 🧠 Setup Node.js for semantic-release
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Install semantic-release
+        run: npm install --global semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/release-notes-generator
+
+      - name: 🚀 Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: semantic-release
