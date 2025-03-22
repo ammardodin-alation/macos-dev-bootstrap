@@ -10,13 +10,13 @@ jobs:
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        runner: [macos-13, macos-14]  # macos-13 = Intel, macos-14 = Apple Silicon
+        runner: [macos-13, macos-14]
 
     steps:
-      - name: ✅ Checkout repository
+      - name: 🛎️ Checkout repository
         uses: actions/checkout@v3
 
-      - name: ✅ Cache Homebrew
+      - name: 📥 Cache Homebrew
         uses: actions/cache@v3
         with:
           path: |
@@ -24,45 +24,64 @@ jobs:
             ~/Library/Caches/Homebrew
           key: brew-${{ matrix.runner }}-${{ hashFiles('Brewfile') }}
 
-      - name: ✅ Lint setup script with shellcheck
+      - name: 🔎 Lint setup script with shellcheck
         run: |
+          set -euo pipefail
           brew install shellcheck
           shellcheck setup.sh
 
-      - name: ✅ Install Brewfile dependencies in CI
-        run: brew bundle --file=./Brewfile
+      - name: 🍺 Install Brewfile dependencies in CI
+        run: |
+          set -euo pipefail
+          brew update
+          brew upgrade
+          brew bundle --file=./Brewfile
 
-      - name: ✅ Install AWS CLI for function validation
-        run: brew install awscli
+      - name: 🛠️ Make setup script executable
+        run: |
+          set -euo pipefail
+          chmod +x setup.sh
 
-      - name: ✅ Make setup script executable
-        run: chmod +x setup.sh
-
-      - name: ✅ Run setup script in CI mode (skips Brewfile inside)
-        run: CI_MODE=1 ./setup.sh
+      - name: 🚀 Run setup script in CI mode (skips Brewfile inside)
+        run: |
+          set -euo pipefail
+          CI_MODE=1 ./setup.sh
 
       - name: ✅ Validate zsh-autosuggestions is in .zshrc
-        run: grep 'zsh-autosuggestions' ~/.zshrc
+        run: |
+          set -euo pipefail
+          grep 'zsh-autosuggestions' ~/.zshrc
 
-      - name: ✅ Validate starship is configured in .zshrc
-        run: grep 'starship init zsh' ~/.zshrc
+      - name: ✨ Validate starship is configured in .zshrc
+        run: |
+          set -euo pipefail
+          grep 'starship init zsh' ~/.zshrc
 
-      - name: ✅ Validate starship.toml is copied
-        run: test -f "${HOME}/.config/starship.toml"
+      - name: 📂 Validate starship.toml is copied
+        run: |
+          set -euo pipefail
+          test -f "${HOME}/.config/starship.toml"
 
-      - name: ✅ Validate .zshrc contains custom functions block
-        run: grep 'CUSTOM FUNCTIONS' ~/.zshrc
+      - name: 🔄 Validate .zshrc contains custom functions block
+        run: |
+          set -euo pipefail
+          grep 'CUSTOM FUNCTIONS' ~/.zshrc
 
-      - name: ✅ Validate .zshrc contains history settings block
-        run: grep 'ZSH HISTORY SETTINGS' ~/.zshrc
+      - name: 🧠 Validate .zshrc contains history settings block
+        run: |
+          set -euo pipefail
+          grep 'ZSH HISTORY SETTINGS' ~/.zshrc
 
-      - name: ✅ Simulate Zsh shell test to verify shell is usable
-        run: exec zsh -c 'echo "✅ Zsh shell test passed"'
+      - name: 🖥️ Simulate Zsh shell test to verify shell is usable
+        run: |
+          set -euo pipefail
+          exec zsh -c 'echo "✅ Zsh shell test passed"'
 
-      - name: ✅ Validate AWS CLI mock usage (simulate EC2 call)
+      - name: 🔥 Validate AWS CLI mock usage (simulate EC2 call)
         env:
           AWS_REGION: us-east-1
           AWS_PROFILE: dummy-profile
         run: |
+          set -euo pipefail
           echo "Simulating AWS function call"
           aws --version
