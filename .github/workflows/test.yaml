@@ -22,7 +22,7 @@ jobs:
           path: |
             /usr/local/Homebrew
             ~/Library/Caches/Homebrew
-          key: brew-${{ matrix.runner }}-${{ hashFiles('Brewfile') }}
+          key: brew-${{ matrix.runner }}-${{ hashFiles('Brewfile.shell', 'Brewfile.tools') }}
 
       - name: 🔎 Lint setup script with shellcheck
         run: |
@@ -30,20 +30,27 @@ jobs:
           brew install shellcheck
           shellcheck setup.sh
 
-      - name: 🍺 Install Brewfile dependencies in CI (no update/upgrade)
+      - name: 🍺 Install shell Brewfile in CI
         run: |
           set -euo pipefail
-          brew bundle --file=./Brewfile
+          brew bundle --file=Brewfile.shell
 
-      - name: 🛠️ Make setup script executable
+      - name: ⚙️ Run setup script in CI mode (shell config only)
         run: |
           set -euo pipefail
           chmod +x setup.sh
+          CI_MODE=1 ./setup.sh
 
-      - name: 🚀 Run setup script in CI mode (skips Brewfile inside)
+      - name: 📦 Install tools (skip awscli on macos-13)
         run: |
           set -euo pipefail
-          CI_MODE=1 ./setup.sh
+          if [[ "${{ matrix.runner }}" == "macos-13" ]]; then
+            echo "⚠️ Skipping awscli on macos-13"
+            grep -v 'brew "awscli"' Brewfile.tools > Brewfile.tools.ci
+            brew bundle --file=Brewfile.tools.ci
+          else
+            brew bundle --file=Brewfile.tools
+          fi
 
       - name: ✅ Validate zsh-autosuggestions is in .zshrc
         run: |

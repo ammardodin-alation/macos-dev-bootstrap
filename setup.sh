@@ -9,20 +9,11 @@ trap 'echo "❌ Error occurred at $BASH_SOURCE:$LINENO"' ERR
 
 HOME="${HOME:-.}"
 ZSHRC="$HOME/.zshrc"
-BREWFILE="./Brewfile"
 VERSION=$(git rev-parse --short HEAD 2>/dev/null || echo "dev")
 
-echo "🚀 Setting up macOS Development Environment (Version: $VERSION)"
+echo "🚀 macOS Development Environment Setup (Version: $VERSION)"
 
-sync_zsh_block() {
-  local start_tag="$1"
-  local end_tag="$2"
-  local content="$3"
-
-  sed -i '' "/$start_tag/,/$end_tag/d" "$ZSHRC"
-  printf "\n%s\n%s\n%s\n" "$start_tag" "$content" "$end_tag" >> "$ZSHRC"
-}
-
+# Install Homebrew if needed
 if ! command -v brew &>/dev/null; then
   echo "🍺 Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -30,18 +21,17 @@ else
   echo "✅ Homebrew already installed."
 fi
 
+# Install shell-specific tools first
 if [[ "${CI_MODE:-0}" -eq 0 ]]; then
-  echo "📦 Checking Brewfile dependencies..."
-  if ! brew bundle check --file="$BREWFILE"; then
-    echo "📦 Installing missing Brewfile dependencies..."
-    brew bundle --file="$BREWFILE"
-  else
-    echo "✅ All Brewfile dependencies are already installed."
-  fi
+  echo "🔧 Installing shell utilities from Brewfile.shell..."
+  brew bundle --file=Brewfile.shell
 else
-  echo "🚀 Skipping brew bundle install in CI mode (handled by CI job)"
+  echo "🚀 CI Mode: Skipping Brewfile.shell (handled by CI)"
 fi
 
+echo "⚙️ Configuring Zsh, plugins, completions, history, and Starship..."
+
+# Install Oh My Zsh if missing
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   echo "✨ Installing Oh My Zsh..."
   export RUNZSH=no
@@ -50,24 +40,25 @@ else
   echo "✅ Oh My Zsh already installed."
 fi
 
-echo "🐚 Setting Zsh as the default shell..."
-ZSH="/bin/zsh"
-if ! grep -q "$ZSH" /etc/shells; then
-  echo "$ZSH" | sudo tee -a /etc/shells
+# Set Zsh as default shell
+ZSH_BIN="/bin/zsh"
+if ! grep -q "$ZSH_BIN" /etc/shells; then
+  echo "$ZSH_BIN" | sudo tee -a /etc/shells
 fi
 
-if [ "$SHELL" != "$ZSH" ]; then
-  [[ "${CI_MODE:-0}" -eq 0 ]] && chsh -s "$ZSH" && echo "✅ Default shell changed to system Zsh."
+if [ "$SHELL" != "$ZSH_BIN" ] && [[ "${CI_MODE:-0}" -eq 0 ]]; then
+  chsh -s "$ZSH_BIN"
+  echo "✅ Default shell changed to system Zsh."
 else
-  echo "✅ Default shell is already set to system Zsh."
+  echo "✅ Default shell is already Zsh."
 fi
 
-echo "✨ Ensuring zsh-autosuggestions is sourced..."
+# Add zsh-autosuggestions
 if ! grep -q "^source \\\$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh\$" "$ZSHRC"; then
   echo "source \$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" >> "$ZSHRC"
 fi
 
-echo "✨ Ensuring Zsh completion system is initialized..."
+# Ensure compinit is configured
 if ! grep -q '^autoload -Uz compinit' "$ZSHRC"; then
   cat <<'EOF' >> "$ZSHRC"
 
@@ -77,7 +68,7 @@ compinit -d "${ZDOTDIR:-$HOME}/.zcompdump"
 EOF
 fi
 
-echo "🚀 Configuring Starship..."
+# Setup Starship prompt
 mkdir -p "${HOME}/.config"
 if ! diff -q "starship.toml" "${HOME}/.config/starship.toml" &>/dev/null; then
   cp "starship.toml" "${HOME}/.config/starship.toml"
@@ -86,11 +77,11 @@ else
   echo "✅ starship.toml is already up to date."
 fi
 
-echo "✨ Ensuring Starship is initialized in Zsh..."
 if ! grep -q "^eval \"\\\$(starship init zsh)\"\$" "$ZSHRC"; then
   echo "eval \"\$(starship init zsh)\"" >> "$ZSHRC"
 fi
 
+# Sync custom functions into .zshrc
 echo "🧠 Syncing custom functions..."
 FUNCTION_BLOCK_START="# >>> CUSTOM FUNCTIONS >>>"
 FUNCTION_BLOCK_END="# <<< CUSTOM FUNCTIONS <<<"
@@ -119,9 +110,12 @@ function terminateec2 {
 }
 EOF
 )
-sync_zsh_block "$FUNCTION_BLOCK_START" "$FUNCTION_BLOCK_END" "$CUSTOM_FUNCTIONS"
+
+sed -i '' "/$FUNCTION_BLOCK_START/,/$FUNCTION_BLOCK_END/d" "$ZSHRC"
+printf "\n%s\n%s\n%s\n" "$FUNCTION_BLOCK_START" "$CUSTOM_FUNCTIONS" "$FUNCTION_BLOCK_END" >> "$ZSHRC"
 echo "✅ Custom functions synced to .zshrc"
 
+# Sync Zsh history settings
 echo "🧠 Syncing Zsh history settings..."
 HISTORY_BLOCK_START="# >>> ZSH HISTORY SETTINGS >>>"
 HISTORY_BLOCK_END="# <<< ZSH HISTORY SETTINGS <<<"
@@ -141,28 +135,51 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_VERIFY
 EOF
 )
-sync_zsh_block "$HISTORY_BLOCK_START" "$HISTORY_BLOCK_END" "$HISTORY_SETTINGS"
+
+sed -i '' "/$HISTORY_BLOCK_START/,/$HISTORY_BLOCK_END/d" "$ZSHRC"
+printf "\n%s\n%s\n%s\n" "$HISTORY_BLOCK_START" "$HISTORY_SETTINGS" "$HISTORY_BLOCK_END" >> "$ZSHRC"
 echo "✅ Zsh history settings synced to .zshrc"
 
-echo ""
-echo "🔧 iTerm2 Key Binding Automation:"
-echo "Setting up Ctrl + Backspace to delete previous word (send 0x17)"
-defaults write com.googlecode.iterm2 "New Bookmarks" -array-add \
-  "{
-    Name = \"Default\";
-    Shortcut = \"^?\";
-    Action = 10;
-    Text = \"\\U0017\";
-    ModifierFlags = 262144;
-  }"
-echo "✅ iTerm2 key binding added (restart iTerm2 if needed)"
+# Install remaining tools and apps BEFORE iTerm2 bindings
+if [[ "${CI_MODE:-0}" -eq 0 ]]; then
+  echo "📦 Installing remaining tools from Brewfile.tools..."
+  brew bundle --file=Brewfile.tools
+else
+  echo "🚀 CI Mode: Skipping Brewfile.tools (handled by CI)"
+fi
+
+# iTerm2 Keybinding setup (last step)
+echo "🔧 Configuring iTerm2 key binding for Ctrl + Backspace (delete word)"
+function configure_iterm2_keybinding() {
+  PLIST=~/Library/Preferences/com.googlecode.iterm2.plist
+
+  /usr/libexec/PlistBuddy -c "Delete :New\ Bookmarks" "$PLIST" || true
+  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks array" "$PLIST"
+
+  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0 dict" "$PLIST"
+  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0:Shortcut string 0x7f" "$PLIST"
+  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0:Action integer 10" "$PLIST"
+  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0:Text string \u0017" "$PLIST"
+  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0:ModifierFlags integer 262144" "$PLIST"
+
+  echo "✅ iTerm2 keybinding updated via PlistBuddy. Restart iTerm2 to apply."
+}
+
 
 echo ""
 echo "🎉 Setup complete!"
 echo "✅ Oh My Zsh configured"
-echo "✅ Homebrew packages installed (if not CI)"
-echo "✅ Starship prompt ready"
-echo "✅ Custom Zsh functions, completion, and history settings applied"
+echo "✅ Zsh plugins, history, and completions ready"
+echo "✅ Starship prompt configured"
+echo "✅ Custom functions installed"
+echo "✅ Tools installed"
 echo ""
-echo "💡 Don't forget: Open iTerm2 → Preferences → Profiles → Text → Change Font → Select 'Hack Nerd Font'"
-echo "💡 Run 'exec zsh' or restart your terminal to apply changes"
+echo "💡 Next Step: Update iTerm2 key bindings manually"
+echo "➡️ Open iTerm2 → Preferences → Profiles → Keys"
+echo "➡️ Add a new key mapping:"
+echo "    - Keyboard Shortcut: ⌃ (Control) + ⌫ (Backspace)"
+echo "    - Action: Send Hex Code"
+echo "    - Hex Code: 0x17 (This sends Ctrl+W)"
+echo ""
+echo "💡 Also, set your iTerm2 font to 'Hack Nerd Font' for best experience"
+echo "💡 Run 'exec zsh' or restart your terminal"

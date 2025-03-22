@@ -1,0 +1,22 @@
+# Remaining CLI tools and apps
+brew "awscli"
+brew "curl"
+brew "gh"
+brew "helm"
+brew "htop"
+brew "jq"
+brew "kubectl"
+brew "kubectx"
+brew "neofetch"
+brew "ripgrep"
+brew "tfenv"
+brew "tree"
+brew "watch"
+brew "yq"
+
+# GUI applications
+cask "font-hack-nerd-font"
+cask "iterm2"
+cask "orbstack"
+cask "postman"
+cask "visual-studio-code"
