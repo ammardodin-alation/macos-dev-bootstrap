@@ -14,14 +14,13 @@ This repository provides a simple, testable way to bootstrap a macOS development
 
 ## 🔧 Usage
 
-### 🚀 Run Directly from GitHub (versioned release)
-You can fetch and run the bootstrap script from a specific tag:
+### 🚀 Clone and Run
 
 ```
-curl -fsSL https://raw.githubusercontent.com/ammardodin-alation/macos-dev-bootstrap/v1.0.0/setup.sh | bash
-```
+git clone git@github.com:ammardodin-alation/macos-dev-bootstrap.git
 
-✅ Replace `v1.0.0` with any release tag you want to pin.
+bash -c setup.sh
+```
 
 ## 🔄 CI Automation
 This repo includes a GitHub Actions workflow that:

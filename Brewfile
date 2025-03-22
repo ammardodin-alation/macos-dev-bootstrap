@@ -1,16 +1,23 @@
-brew "jq"
-brew "yq"
-brew "pyenv"
-brew "starship"
-brew "htop"
-brew "ripgrep"
+brew "awscli"
 brew "curl"
+brew "gh"                  # GitHub CLI
+brew "helm"                # Kubernetes package manager
+brew "htop"
+brew "jq"
 brew "kubectl"
 brew "kubectx"
-brew "zsh"
+brew "neofetch"            # System info display
+brew "pyenv"
+brew "ripgrep"
+brew "starship"
 brew "tfenv"
-cask "visual-studio-code"
-cask "orbstack"
-cask "iterm2"
-tap "homebrew/cask-fonts"
+brew "tree"                # Directory tree viewer
+brew "watch"               # Re-run commands repeatedly
+brew "yq"
+brew "zsh-autosuggestions"
+
 cask "font-hack-nerd-font"
+cask "iterm2"
+cask "orbstack"
+cask "postman"             # API testing
+cask "visual-studio-code"
