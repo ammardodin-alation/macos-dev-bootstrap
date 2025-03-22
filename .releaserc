@@ -1,0 +1,45 @@
+{
+    "branches": ["main"],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "parserOpts": {
+            "headerPattern": "^(\\w*)(?:\\((.*)\\))?: ([A-Z]{1,6}-[0-9]{1,6}):\\s(.*)$",
+            "headerCorrespondence": ["type", "scope", "issue", "subject"]
+          },
+          "releaseRules": [
+            { "type": "feat", "release": "minor" },
+            { "type": "feature", "release": "minor" },
+            { "type": "fix", "release": "patch" },
+            { "type": "bugfix", "release": "patch" },
+            { "type": "breaking", "release": "major" }
+          ]
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "writerOpts": {
+            "transform": "function (commit) {\
+              if (commit.issue) {\
+                const jiraUrl = 'https://alationcorp.atlassian.net/browse/' + commit.issue;\
+                commit.subject = `[${commit.issue}](${jiraUrl}) - ${commit.subject}`;\
+              }\
+              return commit;\
+            }"
+          }
+        }
+      ],
+      "@semantic-release/changelog",
+      "@semantic-release/github",
+      [
+        "@semantic-release/git",
+        {
+          "assets": ["CHANGELOG.md"],
+          "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
+  }
+  

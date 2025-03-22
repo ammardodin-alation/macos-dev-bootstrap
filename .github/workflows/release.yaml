@@ -7,15 +7,16 @@ on:
 
 jobs:
   release:
+    if: contains(github.event.head_commit.message, '[release]')
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🛎️ Checkout Repo
+      - name: 🛎️ Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # semantic-release needs full history to compute version
+          fetch-depth: 0  # semantic-release needs the full history
 
-      - name: 🧠 Setup Node.js for semantic-release
+      - name: 🧠 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
