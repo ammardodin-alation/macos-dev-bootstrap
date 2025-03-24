@@ -71,6 +71,13 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
+## 🛠 After Running
+
+1. Open **iTerm2**
+2. Go to **Preferences → Profiles → Text**
+3. Set the font to **Hack Nerd Font**
+4. Restart iTerm2 or run `exec zsh`
+
 ## 🎉 Result
 
 ✅ Fully configured Zsh environment with Starship prompt  

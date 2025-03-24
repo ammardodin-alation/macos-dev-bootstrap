@@ -1,34 +1,25 @@
-name: Release
+name: 🚀 Release Please
 
 on:
   push:
     branches:
-      - main
+      - main  # Change if your default branch differs
 
 permissions:
-  contents: write       # Needed to push CHANGELOG.md, tags
-  issues: write         # Optional: if you want to interact with issues
-  pull-requests: write  # Optional: if you extend semantic-release to comment or PR changelog
+  contents: write      # Required to create releases and tags
+  pull-requests: write # Optional, enables PRs from release-please if needed
 
 jobs:
   release:
+    name: 📦 Create Release
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🛎️ Checkout Repository
+      - name: 🛎️ Checkout repository
         uses: actions/checkout@v4
+
+      - name: 📝 Run Release Please
+        uses: google-github-actions/release-please-action@v4
         with:
-          fetch-depth: 0  # semantic-release needs the full history
-
-      - name: 🧠 Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: 📦 Install semantic-release
-        run: npm install --global semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/release-notes-generator
-
-      - name: 🚀 Run semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: semantic-release
+          release-type: simple
+          package-name: macos-dev-bootstrap
