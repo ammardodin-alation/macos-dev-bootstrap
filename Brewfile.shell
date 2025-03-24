@@ -1,0 +1,4 @@
+# Shell-related core utilities
+brew "zsh-autosuggestions"
+brew "starship"
+brew "pyenv"

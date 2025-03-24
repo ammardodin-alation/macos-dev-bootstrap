@@ -115,6 +115,20 @@ sed -i '' "/$FUNCTION_BLOCK_START/,/$FUNCTION_BLOCK_END/d" "$ZSHRC"
 printf "\n%s\n%s\n%s\n" "$FUNCTION_BLOCK_START" "$CUSTOM_FUNCTIONS" "$FUNCTION_BLOCK_END" >> "$ZSHRC"
 echo "✅ Custom functions synced to .zshrc"
 
+# Sync custom overrides into .zshrc
+echo "🧠 Syncing custom overrides..."
+OVERRIDES_BLOCK_START="# >>> OVERRIDES >>>"
+OVERRIDES_BLOCK_END="# <<< OVERRIDES <<<"
+CUSTOM_OVERRIDES=$(cat <<'EOF'
+export EDITOR=vim
+export VISUAL=vim
+EOF
+)
+
+sed -i '' "/$OVERRIDES_BLOCK_START/,/$OVERRIDES_BLOCK_END/d" "$ZSHRC"
+printf "\n%s\n%s\n%s\n" "$OVERRIDES_BLOCK_START" "$CUSTOM_OVERRIDES" "$OVERRIDES_BLOCK_END" >> "$ZSHRC"
+echo "✅ Custom overrides synced to .zshrc"
+
 # Sync Zsh history settings
 echo "🧠 Syncing Zsh history settings..."
 HISTORY_BLOCK_START="# >>> ZSH HISTORY SETTINGS >>>"
@@ -147,23 +161,6 @@ if [[ "${CI_MODE:-0}" -eq 0 ]]; then
 else
   echo "🚀 CI Mode: Skipping Brewfile.tools (handled by CI)"
 fi
-
-# iTerm2 Keybinding setup (last step)
-echo "🔧 Configuring iTerm2 key binding for Ctrl + Backspace (delete word)"
-function configure_iterm2_keybinding() {
-  PLIST=~/Library/Preferences/com.googlecode.iterm2.plist
-
-  /usr/libexec/PlistBuddy -c "Delete :New\ Bookmarks" "$PLIST" || true
-  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks array" "$PLIST"
-
-  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0 dict" "$PLIST"
-  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0:Shortcut string 0x7f" "$PLIST"
-  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0:Action integer 10" "$PLIST"
-  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0:Text string \u0017" "$PLIST"
-  /usr/libexec/PlistBuddy -c "Add :New\ Bookmarks:0:ModifierFlags integer 262144" "$PLIST"
-
-  echo "✅ iTerm2 keybinding updated via PlistBuddy. Restart iTerm2 to apply."
-}
 
 echo ""
 echo "🎉 Setup complete!"

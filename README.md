@@ -8,7 +8,6 @@ This project bootstraps a fully-featured macOS development environment, handling
 - [🐚 Zsh Configuration](#-zsh-configuration)
 - [🌟 Starship Prompt Customization](#-starship-prompt-customization)
 - [🛠 Execution Flow](#-execution-flow)
-- [🎯 iTerm2 Enhancements](#-iterm2-enhancements)
 - [✅ CI Validated](#-ci-validated-github-actions)
 - [🚀 Usage](#-usage)
 - [🛠 After Running](#-after-running)
@@ -54,11 +53,6 @@ This project bootstraps a fully-featured macOS development environment, handling
 2. Configure **Zsh**: completions, history, plugins, Starship
 3. Install **tools and apps** (`Brewfile.tools`) – AWS CLI, Kubernetes tools, VS Code, etc.
 4. **Configure iTerm2 key bindings** as the final step
-
-## 🎯 iTerm2 Enhancements
-
-- Automatically maps `Ctrl + Backspace` to **delete the previous word**
-- Recommends **Hack Nerd Font** for proper icon and glyph rendering
 
 ## ✅ CI Validated (GitHub Actions)
 
