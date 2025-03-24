@@ -1,4 +1,14 @@
-# 1.0.0 (2025-03-22)
+# Changelog
+
+## [1.0.1](https://github.com/ammardodin-alation/macos-dev-bootstrap/compare/v1.0.0...v1.0.1) (2025-03-24)
+
+
+### Bug Fixes
+
+* **brew:** populate Brewfile.shell ([#2](https://github.com/ammardodin-alation/macos-dev-bootstrap/issues/2)) ([2269bf6](https://github.com/ammardodin-alation/macos-dev-bootstrap/commit/2269bf6842e0c1c21a0260b47459a8bad294e1e0))
+* **ci:** use a pat for release-please ([#3](https://github.com/ammardodin-alation/macos-dev-bootstrap/issues/3)) ([f07d388](https://github.com/ammardodin-alation/macos-dev-bootstrap/commit/f07d388926355740326d0ea6048f01d9d717550d))
+
+## 1.0.0 (2025-03-22)
 
 
 ### ci
