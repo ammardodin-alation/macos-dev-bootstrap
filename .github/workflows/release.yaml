@@ -23,3 +23,4 @@ jobs:
         with:
           release-type: simple
           package-name: macos-dev-bootstrap
+          token: ${{ secrets.RELEASE_PLEASE_PAT }}
